@@ -18,6 +18,7 @@ createdAt: true,
 return (
 <div className="min-h-screen p-6 max-w-7xl mx-auto">
 <h1 className="text-3xl font-bold mb-6 text-center">Усі відео</h1>
+          <div className="flex justify-end mb-4"> <a href="/profile" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" > Мій профіль </a> </div>
 
 <h1 className="text-3xl text-red-500">Перевірка Tailwind</h1>
 
@@ -47,9 +48,12 @@ return (
             </p>
           </div>
         </Link>
+        
       ))}
     </div>
+    
   )}
 </div>
+
 );
 }

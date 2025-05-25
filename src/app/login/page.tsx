@@ -56,6 +56,7 @@ return (
     >
       Увійти
     </button>
+    <div className="mt-4 text-center"> <p> Немає акаунта?{" "} <a href="/register" className="text-blue-600 hover:underline font-semibold" > Зареєструватись </a> </p> </div>
   </form>
 </div>
 )

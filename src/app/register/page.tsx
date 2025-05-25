@@ -79,6 +79,7 @@ return (
     >
       Зареєструватися
     </button>
+    <div className="mt-4 text-center"> <p> Вже є акаунт?{" "} <a href="/login" className="text-blue-600 hover:underline font-semibold" > Увійти </a> </p> </div>
   </form>
 </div>
 )

@@ -99,7 +99,6 @@ return (
       </button>
     </div>
   )}
-
   <h2 className="text-xl font-semibold mb-2">Мої відео</h2>
   {videos.length === 0 ? (
     <p>Ви ще не додали жодного відео</p>
@@ -115,9 +114,12 @@ return (
             Видалити
           </button>
         </li>
-      ))}
+         ))}
     </ul>
-  )}
+     )}
+<div className="flex space-x-4 mb-6"> <a href="/video" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" > Перейти до відео </a> <a href="/login" className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700" > Змінити акаунт </a> </div>
+<div className="mb-6"> <a href="/upload" className="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" > Завантажити відео </a> </div>
 </div>
+
 )
 }
