@@ -1,0 +1,6 @@
+{
+  "/video/page": "app/video/page.js",
+  "/video/[id]/page": "app/video/[id]/page.js",
+  "/api/views/route": "app/api/views/route.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js"
+}
