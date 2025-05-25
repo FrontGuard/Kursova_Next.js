@@ -1,6 +1,12 @@
 {
+  "/profile/page": "app/profile/page.js",
+  "/login/page": "app/login/page.js",
+  "/upload/page": "app/upload/page.js",
+  "/register/page": "app/register/page.js",
   "/video/page": "app/video/page.js",
-  "/video/[id]/page": "app/video/[id]/page.js",
-  "/api/views/route": "app/api/views/route.js",
-  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js"
+  "/api/upload/route": "app/api/upload/route.js",
+  "/api/register/route": "app/api/register/route.js",
+  "/api/profile/videos/route": "app/api/profile/videos/route.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/videos/[id]/route": "app/api/videos/[id]/route.js"
 }
