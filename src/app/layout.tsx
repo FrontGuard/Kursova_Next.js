@@ -8,27 +8,24 @@ import '../styles/custom.css';
 
 export const metadata: Metadata = {
   title: 'VideoHub',
-  description: 'Курсова робота', // Змінено опис для кращої читабельності
-  // Додано ключові слова для SEO (за потреби)
-  keywords: ['відео', 'платформа', 'обмін відео', 'курсова робота'],
-  // Встановлено URL канонічної сторінки (за потреби)
-  // canonical: 'https://yourdomain.com/',
-  // Встановлено мову (вже є в <html>)
+  description: 'Курсова робота - платформа обміну відеоконтентом', // Більш інформативний опис
+  keywords: ['відео', 'платформа', 'обмін відео', 'курсова робота', 'відеохостинг'], // Додано релевантні ключові слова
+  // canonical: 'https://yourdomain.com/', // Розкоментуйте та замініть на свій реальний URL
   // viewport: {
   //   width: 'device-width',
   //   initialScale: 1,
   //   maximumScale: 1,
   //   userScalable: false,
   // },
-  // Open Graph метадані для кращого відображення в соціальних мережах
+  metadataBase: new URL(process.env.NEXT_PUBLIC_NEXTAUTH_URL || 'http://localhost:3000'), // Встановлено базовий URL
   openGraph: {
     title: 'VideoHub',
-    description: 'Курсова робота - платформа обміну відео',
-    url: 'http://localhost:3000/', // Замініть на свій реальний URL
+    description: 'Курсова робота - платформа обміну відеоконтентом',
+    url: process.env.NEXT_PUBLIC_NEXTAUTH_URL || 'http://localhost:3000/', // Використовуйте змінну середовища або реальний URL
     siteName: 'VideoHub',
     // images: [
     //   {
-    //     url: 'https://yourdomain.com/og-image.png', // Замініть на URL вашого зображення OG
+    //     url: '/og-image.png', // Рекомендовано використовувати відносний шлях, Next.js обробить metadataBase
     //     width: 1200,
     //     height: 630,
     //     alt: 'Логотип VideoHub',
@@ -37,15 +34,14 @@ export const metadata: Metadata = {
     locale: 'uk_UA',
     type: 'website',
   },
-  // Twitter Card метадані (за потреби)
-  // twitter: {
-  //   card: 'summary_large_image',
-  //   site: '@yourtwitterhandle',
-  //   creator: '@yourtwitterhandle',
-  //   title: 'VideoHub',
-  //   description: 'Курсова робота - платформа обміну відео',
-  //   images: ['https://yourdomain.com/twitter-image.png'], // Замініть на URL вашого зображення для Twitter
-  // },
+  twitter: {
+    card: 'summary_large_image',
+    // site: '@yourtwitterhandle', // Додайте свій Twitter handle
+    // creator: '@yourtwitterhandle', // Додайте Twitter handle автора
+    title: 'VideoHub',
+    description: 'Курсова робота - платформа обміну відеоконтентом',
+    // images: ['/twitter-image.png'], // Рекомендовано використовувати відносний шлях
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
