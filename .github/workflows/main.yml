@@ -1,0 +1,60 @@
+name: CI/CD Pipeline for VideoHub
+
+on:
+  push:
+    branches:
+      - main # Або ваша основна гілка (master, develop тощо)
+  pull_request:
+    branches:
+      - main # Або ваша основна гілка
+
+jobs:
+  build_test_lint_deploy:
+    name: Build, Test, Lint & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Або версія Node.js, яку використовує ваш проєкт
+          cache: 'npm'
+          cache-dependency-path: ./package-lock.json # Переконайтеся, що шлях правильний
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint # Переконайтеся, що у вас є скрипт "lint" в package.json
+
+      - name: Run Tests with Coverage
+        run: npm run test:coverage # Переконайтеся, що у вас є скрипт "test:coverage"
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+         
+      - name: Build Project
+        run: npm run build
+        env:
+          NODE_ENV: production
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+     
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Deploy to Vercel
+        run: vercel deploy --prebuilt --token ${{ secrets.VERCEL_TOKEN }}
+        working-directory: ./ # Переконайтеся, що ви знаходитесь у корені проєкту
+
+      # (Необов'язково) Запуск Lighthouse CI після розгортання
+      - name: Run Lighthouse CI Audit
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: http://localhost:3000/ # ЗАМІНІТЬ НА URL ВАШОГО РОЗГОРНУТОГО ЗАСТОСУНКУ
