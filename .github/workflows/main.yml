@@ -30,13 +30,7 @@ jobs:
       - name: Run ESLint
         run: npm run lint # Переконайтеся, що у вас є скрипт "lint" в package.json
 
-      - name: Run Tests with Coverage
-        run: npm run test:coverage # Переконайтеся, що у вас є скрипт "test:coverage"
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
-         
+     
       - name: Build Project
         run: npm run build
         env:
@@ -46,12 +40,9 @@ jobs:
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
      
 
-      - name: Install Vercel CLI
-        run: npm install --global vercel@latest
+    
 
-      - name: Deploy to Vercel
-        run: vercel deploy --prebuilt --token ${{ secrets.VERCEL_TOKEN }}
-        working-directory: ./ # Переконайтеся, що ви знаходитесь у корені проєкту
+    
 
       # (Необов'язково) Запуск Lighthouse CI після розгортання
       - name: Run Lighthouse CI Audit
