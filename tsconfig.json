@@ -17,11 +17,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "baseUrl": "./src",
+    "baseUrl": "@/lib/auth",
     "paths": {
-      "@/": [
-        ""
-      ]
+      "@/": ["src/"]
     },
     "plugins": [
       {
@@ -31,9 +29,10 @@
   },
   "include": [
     "next-env.d.ts",
-    ".next/types//*.ts",
-    "/.ts",
-    "**/.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/types/next-auth.d.ts",
+    ".next/types/**/.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": [

@@ -1,23 +1,23 @@
 generator client {
-provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-provider = "postgresql"
-url = env("DATABASE_URL")
+  provider = "postgresql"
+  url = env("DATABASE_URL")
 }
 
 model User {
-id String @id @default(cuid())
-name String
-email String @unique
-password String
-role Role @default(USER)
-videos Video[]
-comments Comment[]
-likes Like[]
-views View[]
-createdAt DateTime @default(now())
+  id        String    @id @default(cuid())
+  name      String
+  email     String    @unique
+  password  String
+  role      Role      @default(USER)
+  videos    Video[]
+  comments  Comment[]
+  likes     Like[]
+  views     View[]
+  createdAt DateTime  @default(now())
 }
 
 model Video {
@@ -25,7 +25,7 @@ model Video {
   title       String
   description String?
   url         String
-  thumbnail   String?        
+  thumbnail   String?
   user        User      @relation(fields: [userId], references: [id])
   userId      String
   comments    Comment[]
@@ -36,38 +36,38 @@ model Video {
 }
 
 model Comment {
-id String @id @default(cuid())
-text String
-user User @relation(fields: [userId], references: [id])
-userId String
-video Video @relation(fields: [videoId], references: [id])
-videoId String
-createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  text      String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  video     Video    @relation(fields: [videoId], references: [id], onDelete: Cascade) // onDelete тут
+  videoId   String
+  createdAt DateTime @default(now())
 }
 
 model Like {
-id String @id @default(cuid())
-user User @relation(fields: [userId], references: [id])
-userId String
-video Video @relation(fields: [videoId], references: [id])
-videoId String
-createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  video     Video    @relation(fields: [videoId], references: [id], onDelete: Cascade) // onDelete тут
+  videoId   String
+  createdAt DateTime @default(now())
 
-@@unique([userId, videoId]) // один лайк на одне відео
+  @@unique([userId, videoId]) // один лайк на одне відео
 }
 
 model View {
-id String @id @default(cuid())
-user User? @relation(fields: [userId], references: [id])
-userId String?
-video Video @relation(fields: [videoId], references: [id])
-videoId String
-createdAt DateTime @default(now())
+  id        String    @id @default(cuid())
+  user      User?     @relation(fields: [userId], references: [id])
+  userId    String?
+  video     Video     @relation(fields: [videoId], references: [id], onDelete: Cascade) // onDelete тут
+  videoId   String
+  createdAt DateTime  @default(now())
 
-@@unique([userId, videoId]) 
+  @@unique([userId, videoId])
 }
 
 enum Role {
-USER
-ADMIN
+  USER
+  ADMIN
 }

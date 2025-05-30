@@ -1,59 +1,97 @@
-import { prisma } from '../../../lib/prisma'
-import RecordViewClient from '../../../components/RecordViewClient'
-import LikeButton from '../../../components/LikeButton'
-import CommentsSection from '../../../components/CommentsSection'
+import Link from 'next/link';
+import { prisma } from '../../../lib/prisma';
+import RecordViewClient from '../../../components/RecordViewClient';
+import LikeButton from '../../../components/LikeButton';
+import CommentsSection from '../../../components/CommentsSection';
+import '../../../styles/custom.css';
 
 interface VideoPageProps {
-params: { id: string }
+  params: { id: string };
 }
 
-export const revalidate = 0 // не кешувати
+export const revalidate = 0;
 
 export default async function VideoPage({ params }: VideoPageProps) {
-const video = await prisma.video.findUnique({
-where: { id: params.id },
-select: {
-id: true,
-title: true,
-description: true,
-url: true,
-thumbnail: true,
-createdAt: true,
-user: { select: { name: true } },
-_count: {
-select: {
-views: true,
-likes: true,
-comments: true,
-},
-},
-},
-})
+  const video = await prisma.video.findUnique({
+    where: { id: params.id },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      url: true,
+      thumbnail: true,
+      createdAt: true,
+      user: {
+        select: {
+          name: true,
+          id: true, // для посилання на канал
+        },
+      },
+      _count: {
+        select: {
+          views: true,
+          likes: true,
+          comments: true,
+        },
+      },
+    },
+  });
 
-if (!video) {
-return <div className="p-6 text-center">Відео не знайдено</div>
-}
+  if (!video) {
+    return (
+      <div className="p-6 text-center text-red-600 font-semibold">
+        Відео не знайдено
+      </div>
+    );
+  }
 
-return (
-<div className="max-w-4xl mx-auto p-6 space-y-6">
-<h1 className="text-3xl font-bold">{video.title}</h1>
-<div className="flex space-x-4 mb-6"> <a href="/video" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" > Перейти до відео </a> <a href="/profile" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" > Мій профіль </a> </div>
+  return (
+    <div className="video-container">
+      <h1 className="video-title">{video.title}</h1>
 
-<p className="text-sm text-gray-500">
-Додано: {new Date(video.createdAt).toLocaleString()} | Автор: {video.user.name}
-</p>
+      <p className="text-sm text-gray-500 mt-2">
+        Додано: {new Date(video.createdAt).toLocaleString()} | Автор:{' '}
+        <Link href={`/channel/${video.user.id}`} className="text-blue-600 hover:underline">
+          {video.user.name}
+        </Link>
+      </p>
 
+      <div className="video-player-wrapper mt-4">
+        <video
+          src={video.url}
+          controls
+          poster={video.thumbnail || undefined}
+          className="video-player"
+        />
+      </div>
 
-<div className="w-full aspect-video max-w-4xl mx-auto bg-black rounded-xl overflow-hidden"> <div className="relative w-full h-full"> <video src={video.url} controls poster={video.thumbnail || undefined} className="absolute top-0 left-0 w-full h-full object-contain" /> </div> </div>
-  <p className="whitespace-pre-wrap">{video.description}</p>
-  <div className="flex items-center space-x-6">
-    <div>{video._count.views} переглядів</div>
-    <RecordViewClient videoId={video.id} />
-    <LikeButton videoId={video.id} initialCount={video._count.likes} />
-    <div>{video._count.comments} коментарів</div>
-  </div>
+      {video.description && (
+        <p className="video-description mt-4 text-gray-700 whitespace-pre-line">
+          {video.description}
+        </p>
+      )}
 
-  <CommentsSection videoId={video.id} />
-</div>
-)
+      <div className="video-stats-bar mt-4 flex flex-wrap items-center gap-4 text-sm text-gray-600">
+        <span className="stat-button">
+          👁 <strong>{video._count.views}</strong> переглядів
+        </span>
+
+        <RecordViewClient videoId={video.id} />
+
+        <LikeButton
+          videoId={video.id}
+          initialCount={video._count.likes}
+          // className="stat-button" // Видалено проп className
+        />
+
+        <span className="stat-button">
+          💬 <strong>{video._count.comments}</strong> коментарів
+        </span>
+      </div>
+
+      <div className="mt-6">
+        <CommentsSection videoId={video.id} />
+      </div>
+    </div>
+  );
 }

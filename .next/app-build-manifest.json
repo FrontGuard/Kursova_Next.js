@@ -1,9 +1,9 @@
 {
   "pages": {
-    "/login/page": [
+    "/global-error": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/login/page.js"
+      "static/chunks/app/global-error.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -11,30 +11,11 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/video/page": [
+    "/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/video/page.js"
-    ],
-    "/register/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/register/page.js"
-    ],
-    "/profile/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/profile/page.js"
-    ],
-    "/upload/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/upload/page.js"
-    ],
-    "/video/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/video/[id]/page.js"
+      "static/chunks/app/login/page.js",
+      "static/css/app/login/page.css"
     ]
   }
 }

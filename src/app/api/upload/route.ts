@@ -1,13 +1,11 @@
-// Явно використовуємо Node.js runtime
 export const runtime = 'nodejs';
-export const config = { api: { bodyParser: false } };
-
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
 import { prisma } from '../../../lib/prisma';
 import fs from 'fs';
 import path from 'path';
+
 
 export async function POST(request: Request) {
   // 1. Перевірка сесії

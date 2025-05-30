@@ -1,18 +1,25 @@
-import { prisma } from "../../../../lib/prisma"
-import { getServerSession } from "next-auth"
-import { authOptions } from "../../auth/[...nextauth]/route"
-import { NextResponse } from "next/server"
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/[...nextauth]/route";
+import { prisma } from "../../../../lib/prisma";
+import { NextResponse } from "next/server";
 
 export async function GET() {
-const session = await getServerSession(authOptions)
+  const session = await getServerSession(authOptions);
+  console.log("Session in /api/admin/users:", session); // Додано console.log
 
-if (!session || session.user.role !== "ADMIN") {
-return new NextResponse("Unauthorized", { status: 401 })
+  if (!session || session?.user?.role?.toLowerCase() !== "admin") {
+  return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
 }
 
-const users = await prisma.user.findMany({
-select: { id: true, name: true, email: true, role: true }
-})
+  try {
+    const users = await prisma.user.findMany({
+      orderBy: { name: "asc" },
+      select: { id: true, name: true, email: true, role: true },
+    });
 
-return NextResponse.json(users)
+    return NextResponse.json(users);
+  } catch (error) {
+    console.error("Помилка при отриманні користувачів:", error);
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
+  }
 }

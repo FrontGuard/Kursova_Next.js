@@ -1,0 +1,87 @@
+.channel-container {
+min-height: 100vh;
+padding: 2.5rem 1rem;
+max-width: 1280px;
+margin: 0 auto;
+font-family: 'Segoe UI', sans-serif;
+}
+
+.channel-title {
+font-size: 2.5rem;
+font-weight: bold;
+text-align: center;
+color: #1e293b;
+margin-bottom: 0.5rem;
+}
+
+.channel-meta {
+text-align: center;
+color: #64748b;
+margin-bottom: 2rem;
+font-size: 1rem;
+}
+
+.channel-loading,
+.channel-empty {
+text-align: center;
+font-size: 1.2rem;
+color: #64748b;
+padding: 2rem 0;
+}
+
+.channel-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+gap: 1.5rem;
+}
+
+.channel-card {
+background-color: #fff;
+border-radius: 1rem;
+border: 1px solid #e2e8f0;
+box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+overflow: hidden;
+transition: all 0.3s ease-in-out;
+text-decoration: none;
+color: inherit;
+}
+
+.channel-card:hover {
+transform: translateY(-4px);
+box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.channel-thumbnail {
+background-color: #f1f5f9;
+}
+
+.channel-img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+
+.channel-noimg {
+width: 100%;
+height: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+color: #94a3b8;
+font-size: 0.9rem;
+}
+
+.channel-card h2 {
+font-size: 1rem;
+font-weight: 600;
+padding: 0.75rem 1rem 0 1rem;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.channel-card p {
+font-size: 0.8rem;
+color: #6b7280;
+padding: 0 1rem 1rem 1rem;
+}

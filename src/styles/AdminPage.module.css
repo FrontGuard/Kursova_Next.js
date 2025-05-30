@@ -1,0 +1,66 @@
+.container {
+  padding: 1.5rem;
+}
+
+.heading {
+  font-size: 1.875rem; /* text-2xl */
+  font-weight: 700; /* font-bold */
+  margin-bottom: 1rem;
+}
+
+.sectionHeading {
+  font-size: 1.25rem; /* text-xl */
+  font-weight: 600; /* font-semibold */
+  margin-bottom: 0.5rem;
+}
+
+.noData {
+  margin-bottom: 1rem;
+}
+
+.list {
+  margin-bottom: 2.5rem;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.listItem {
+  border: 1px solid #e5e7eb; /* border gray-200 */
+  padding: 1rem;
+  border-radius: 0.25rem; /* rounded-md */
+  margin-bottom: 1rem;
+}
+
+.videoTitle {
+  font-size: 1.125rem; /* text-lg */
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.deleteButton {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  background-color: #dc2626; /* bg-red-600 */
+  color: #fff; /* text-white */
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.deleteButton:hover {
+  background-color: #b91c1c; /* hover:bg-red-700 */
+}
+
+.userItem {
+  border: 1px solid #e5e7eb;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.loading {
+  padding: 1.5rem;
+  text-align: center;
+}

@@ -1,0 +1,158 @@
+/* Основний контейнер */
+.profile-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 32px;
+  background-color: #f9fafb;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Заголовок профілю */
+.profile-title {
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 32px;
+  color: #1f2937;
+}
+
+/* Блок інформації */
+.profile-info {
+  background-color: #eef2f7;
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+/* Підзаголовки */
+.profile-subtitle {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #111827;
+}
+
+/* Текст */
+.profile-info p {
+  margin: 4px 0;
+  color: #374151;
+}
+
+/* Кнопки */
+.profile-button-group {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Великі кнопки */
+.profile-button-delete,
+.profile-button-logout,
+.profile-button-alt {
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Видалення акаунту */
+.profile-button-delete {
+  background-color: #dc2626;
+  color: white;
+}
+.profile-button-delete:hover {
+  background-color: #b91c1c;
+}
+
+/* Вихід */
+.profile-button-logout {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+.profile-button-logout:hover {
+  background-color: #e5e7eb;
+}
+
+/* Кнопка "Оновити" */
+.profile-button-alt {
+  background-color: #4b5563;
+  color: white;
+  margin-top: 12px;
+}
+.profile-button-alt:hover {
+  background-color: #374151;
+}
+
+/* Вивід повідомлень */
+.profile-message {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 16px;
+  color: #6b7280;
+}
+
+/* Інпути */
+input[type='text'],
+input[type='password'] {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  background-color: #fff;
+  color: #111827;
+  transition: border-color 0.2s ease;
+}
+input:focus {
+  border-color: #2563eb;
+  outline: none;
+}
+
+/* Список відео */
+.profile-video-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Відео-картка */
+.profile-video-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #d1d5db;
+}
+
+/* Назва відео */
+.profile-video-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* Кнопка видалити відео */
+.profile-button-delete-small {
+  background-color: #ef4444;
+  color: white;
+  padding: 6px 10px;
+  font-size: 13px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.profile-button-delete-small:hover {
+  background-color: #dc2626;
+}

@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { NextRequest, NextResponse } from "next/server";
 
-// GET коментарі
+
 export async function GET(req: NextRequest) {
 const videoId = req.nextUrl.searchParams.get("videoId");
 if (!videoId) return NextResponse.json({ error: "Missing videoId" }, { status: 400 });

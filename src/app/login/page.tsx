@@ -3,6 +3,7 @@
 import { signIn } from 'next-auth/react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import '../../styles/custom.css' // переконайся, що підключено
 
 export default function LoginPage() {
 const router = useRouter()
@@ -18,45 +19,49 @@ email,
 password,
 })
 
+
 if (res?.error) {
   setError('Невірний email або пароль')
 } else {
-  router.push('/profile') // або інша захищена сторінка
+  router.push('/profile')
 }
 }
 
 return (
-<div className="min-h-screen flex flex-col items-center justify-center p-4">
-<form onSubmit={handleSubmit} className="w-full max-w-md bg-white p-6 rounded shadow">
-<h1 className="text-xl font-bold mb-4">Вхід</h1>
+<div className="auth-container">
+<form onSubmit={handleSubmit} className="auth-form">
+<h1 className="auth-title">Вхід до акаунту</h1>
 
 
-
-
-    {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+    {error && <p className="auth-error">{error}</p>}
 
     <input
       type="email"
       placeholder="Email"
       value={email}
       onChange={e => setEmail(e.target.value)}
-      className="w-full p-2 border mb-3 rounded"
+      className="auth-input"
     />
     <input
       type="password"
       placeholder="Пароль"
       value={password}
       onChange={e => setPassword(e.target.value)}
-      className="w-full p-2 border mb-4 rounded"
+      className="auth-input"
     />
 
-    <button
-      type="submit"
-      className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
-    >
+    <button type="submit" className="auth-button">
       Увійти
     </button>
-    <div className="mt-4 text-center"> <p> Немає акаунта?{" "} <a href="/register" className="text-blue-600 hover:underline font-semibold" > Зареєструватись </a> </p> </div>
+
+    <div className="auth-footer">
+      <p>
+        Немає акаунта?{' '}
+        <a href="/register" className="auth-link">
+          Зареєструватись
+        </a>
+      </p>
+    </div>
   </form>
 </div>
 )
