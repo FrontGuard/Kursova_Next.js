@@ -3,7 +3,6 @@
 import Head from "next/head";
 import * as Sentry from "@sentry/nextjs";
 import { useState, useEffect } from "react";
-export const dynamic = 'force-dynamic'
 
 class SentryExampleFrontendError extends Error {
   constructor(message: string | undefined) {

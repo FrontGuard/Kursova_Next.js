@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-export const dynamic = 'force-dynamic'
 
 interface Video {
   id: string;

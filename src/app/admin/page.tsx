@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import styles from '../../styles/AdminPage.module.css';
-export const dynamic = 'force-dynamic'
 
 interface Video {
   id: string;

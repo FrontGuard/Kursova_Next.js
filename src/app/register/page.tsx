@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import '../../styles/custom.css' // Імпорт кастомних стилів
-export const dynamic = 'force-dynamic'
 
 export default function RegisterPage() {
 const router = useRouter()
