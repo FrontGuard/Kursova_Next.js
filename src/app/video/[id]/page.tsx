@@ -4,6 +4,7 @@ import RecordViewClient from '../../../components/RecordViewClient';
 import LikeButton from '../../../components/LikeButton';
 import CommentsSection from '../../../components/CommentsSection';
 import '../../../styles/custom.css';
+export const dynamic = 'force-dynamic'
 
 interface VideoPageProps {
   params: { id: string };

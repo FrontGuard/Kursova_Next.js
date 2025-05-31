@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+export const dynamic = 'force-dynamic'
 
 interface Video {
   id: string
