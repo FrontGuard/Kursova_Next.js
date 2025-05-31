@@ -12,6 +12,8 @@ module.exports = withSentryConfig(
     project: "coursework",
 
     silent: !process.env.CI,
+    output: 'export',
+    assetPrefix: isProd ? '/' : '',
 
 
     widenClientFileUpload: true,
