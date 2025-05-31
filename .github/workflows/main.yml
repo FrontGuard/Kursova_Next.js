@@ -49,4 +49,4 @@ jobs:
       - name: Run Lighthouse CI Audit
         uses: treosh/lighthouse-ci-action@v11
         with:
-          urls: http://localhost:3000/ # ЗАМІНІТЬ НА URL ВАШОГО РОЗГОРНУТОГО ЗАСТОСУНКУ
+          urls: https://kursova-next-js-git-main-frontguards-projects.vercel.app # ЗАМІНІТЬ НА URL ВАШОГО РОЗГОРНУТОГО ЗАСТОСУНКУ
