@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server'
-import { prisma } from '../../../../lib/prisma' // або '../../../../lib/prisma' залежно від вашої структури
+import { NextResponse } from 'next/server';
+import { prisma } from '../../../../lib/prisma'; // або '../../../../lib/prisma' залежно від вашої структури
 
 export async function GET(
   _req: Request,
@@ -16,13 +16,13 @@ export async function GET(
             id: true,
             title: true,
             thumbnail: true,
-            createdAt: true
+            createdAt: true,
           },
           orderBy: {
-            createdAt: 'desc'
-          }
-        }
-      }
+            createdAt: 'desc',
+          },
+        },
+      },
     });
 
     if (!user) {
@@ -32,9 +32,12 @@ export async function GET(
       );
     }
 
+    // Додаємо console.log перед відправкою відповіді
+    console.log('API /api/channel/[id] → Відео автора:', user.videos);
+
     return NextResponse.json({
       name: user.name,
-      videos: user.videos
+      videos: user.videos,
     });
   } catch (error) {
     console.error('Channel API error:', error);

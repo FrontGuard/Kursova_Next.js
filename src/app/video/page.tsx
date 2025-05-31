@@ -105,7 +105,9 @@ console.log("SESSION", session?.user);
               href={`/video/${video.id}`}
               className="gallery-card"
             >
+              
               {video.thumbnail ? (
+                
                 <Image
                   src={video.thumbnail}
                   alt={video.title}
