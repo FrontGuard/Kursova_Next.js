@@ -7,7 +7,7 @@ export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session?.user) return NextResponse.json({ liked: false });
 
-  const { searchParams } = new URL(req.url);
+  const { searchParams } = new URL(req.url, 'http://localhost:3000/');
   const videoId = searchParams.get("videoId");
   if (!videoId) return NextResponse.json({ liked: false });
 
