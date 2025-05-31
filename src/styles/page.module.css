@@ -1,0 +1,67 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: #f0f0f0; /* За потреби змініть колір фону */
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4rem;
+  background-color: #fff; /* Колір фону основної частини */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+.description {
+  font-size: 1.2rem;
+  color: #555;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+.buttonContainer {
+  margin-top: 2rem;
+}
+
+.videoButton {
+  display: inline-block;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  background-color: #007bff; /* Основний колір кнопки */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.videoButton:hover {
+  background-color: #0056b3; /* Колір кнопки при наведенні */
+}
+
+.footer {
+  width: 100%;
+  padding: 1rem 0;
+  text-align: center;
+  color: #777;
+  font-size: 0.9rem;
+  margin-top: 3rem;
+  border-top: 1px solid #eee;
+}
