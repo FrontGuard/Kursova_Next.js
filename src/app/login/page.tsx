@@ -4,7 +4,7 @@ import { signIn } from 'next-auth/react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import '../../styles/custom.css' // переконайся, що підключено
-
+export const dynamic = 'force-dynamic'
 export default function LoginPage() {
 const router = useRouter()
 const [email, setEmail] = useState('')
