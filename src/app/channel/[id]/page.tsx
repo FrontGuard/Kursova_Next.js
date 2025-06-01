@@ -44,7 +44,7 @@ export default function AuthorChannelPage() {
       ) : (
         <>
           <div className="channel-meta">
-            <h1 className="channel-title">Канал: {authorName}</h1>
+            <h1 className="channel-title">Канал: {authorName || 'Невідомий автор'}</h1>
             <p>Загальна кількість відео: {Array.isArray(videos) ? videos.length : 0}</p>
           </div>
 
