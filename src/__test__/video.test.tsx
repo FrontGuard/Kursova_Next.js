@@ -2,6 +2,7 @@ import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import VideoGalleryPage from '../app/video/page';
 import { useSession } from 'next-auth/react';
+import { prismaMock } from '../../prisma.singelton';
 
 // Mock next/link
 jest.mock('next/link', () => ({
@@ -35,6 +36,7 @@ const mockVideos = [
 
 describe('VideoGalleryPage', () => {
   beforeEach(() => {
+    jest.clearAllMocks();
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: async () => mockVideos,
@@ -53,15 +55,13 @@ describe('VideoGalleryPage', () => {
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith('/api/video');
-    });
-
-    await waitFor(() => {
+    });    await waitFor(() => {
       expect(screen.getByText('Перше відео')).toBeInTheDocument();
       expect(screen.getByText('Друге відео')).toBeInTheDocument();
       expect(screen.getByText('Третє відео')).toBeInTheDocument();
-      expect(screen.getByText('Автор 1')).toBeInTheDocument();
-      expect(screen.getByText('Автор 2')).toBeInTheDocument();
-      expect(screen.getByText('Адмін')).toBeInTheDocument();
+      expect(screen.getByText('👤 Автор 1')).toBeInTheDocument();
+      expect(screen.getByText('👤 Автор 2')).toBeInTheDocument();
+      expect(screen.getByText('👤 Адмін')).toBeInTheDocument();
       expect(screen.getByAltText('Перше відео')).toBeInTheDocument();
       expect(screen.getByText('Немає зображення')).toBeInTheDocument();
       expect(screen.getByAltText('Третє відео')).toBeInTheDocument();
@@ -94,7 +94,6 @@ describe('VideoGalleryPage', () => {
       expect(screen.queryByText('Третє відео')).toBeNull();
     });
   });
-
   it('sorts videos by date (newest first)', async () => {
     render(<VideoGalleryPage />);
 
@@ -102,11 +101,10 @@ describe('VideoGalleryPage', () => {
     fireEvent.change(sortSelect, { target: { value: 'date-desc' } });
 
     await waitFor(() => {
-      const videoTitles = screen.getAllByRole('heading', { name: /відео/i }).map((el) => el.textContent);
+      const videoTitles = screen.getAllByText(/^(Перше відео|Друге відео|Третє відео)$/).map((el) => el.textContent);
       expect(videoTitles).toEqual(['Друге відео', 'Перше відео', 'Третє відео']);
     });
   });
-
   it('sorts videos by date (oldest first)', async () => {
     render(<VideoGalleryPage />);
 
@@ -114,11 +112,10 @@ describe('VideoGalleryPage', () => {
     fireEvent.change(sortSelect, { target: { value: 'date-asc' } });
 
     await waitFor(() => {
-      const videoTitles = screen.getAllByRole('heading', { name: /відео/i }).map((el) => el.textContent);
+      const videoTitles = screen.getAllByText(/^(Перше відео|Друге відео|Третє відео)$/).map((el) => el.textContent);
       expect(videoTitles).toEqual(['Третє відео', 'Перше відео', 'Друге відео']);
     });
   });
-
   it('sorts videos alphabetically (A-Я)', async () => {
     render(<VideoGalleryPage />);
 
@@ -126,11 +123,10 @@ describe('VideoGalleryPage', () => {
     fireEvent.change(sortSelect, { target: { value: 'az' } });
 
     await waitFor(() => {
-      const videoTitles = screen.getAllByRole('heading', { name: /відео/i }).map((el) => el.textContent);
+      const videoTitles = screen.getAllByText(/^(Перше відео|Друге відео|Третє відео)$/).map((el) => el.textContent);
       expect(videoTitles).toEqual(['Друге відео', 'Перше відео', 'Третє відео']); // Assuming localeCompare sorts this way
     });
   });
-
   it('sorts videos alphabetically (Я-A)', async () => {
     render(<VideoGalleryPage />);
 
@@ -138,7 +134,7 @@ describe('VideoGalleryPage', () => {
     fireEvent.change(sortSelect, { target: { value: 'za' } });
 
     await waitFor(() => {
-      const videoTitles = screen.getAllByRole('heading', { name: /відео/i }).map((el) => el.textContent);
+      const videoTitles = screen.getAllByText(/^(Перше відео|Друге відео|Третє відео)$/).map((el) => el.textContent);
       expect(videoTitles).toEqual(['Третє відео', 'Перше відео', 'Друге відео']); // Assuming localeCompare sorts this way
     });
   });

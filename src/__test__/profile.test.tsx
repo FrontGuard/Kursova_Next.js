@@ -1,4 +1,4 @@
-import { render, screen, waitFor, fireEvent, within } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent, within, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ProfilePage from '../app/profile/page';
 import { useSession, signOut } from 'next-auth/react';
@@ -29,7 +29,6 @@ describe('ProfilePage', () => {
   let mockSignOut: jest.Mock;
   let mockRouterPush: jest.Mock;
   let mockConfirm: jest.Mock;
-
   beforeEach(() => {
     mockUseSession = useSession as jest.Mock;
     mockSignOut = signOut as jest.Mock;
@@ -38,6 +37,11 @@ describe('ProfilePage', () => {
     mockConfirm = global.confirm as jest.Mock;
     mockConfirm.mockReturnValue(true); // Default confirm to true
     (global.fetch as jest.Mock).mockClear();
+    // Default mock for video fetch
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => mockVideos,
+    });
     mockUseSession.mockReturnValue({ data: { user: { name: 'Тестовий Користувач', email: 'test@example.com' } }, status: 'authenticated' });
   });
 
@@ -51,28 +55,25 @@ describe('ProfilePage', () => {
     mockUseSession.mockReturnValue({ data: null, status: 'unauthenticated' });
     render(<ProfilePage />);
     expect(mockRouterPush).toHaveBeenCalledWith('/login');
-  });
-
-  it('renders user info and videos on successful authentication', async () => {
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: true,
-      json: async () => mockVideos,
+  });  it('renders user info and videos on successful authentication', async () => {
+    await act(async () => {
+      render(<ProfilePage />);
     });
-
-    render(<ProfilePage />);
 
     await waitFor(() => {
       expect(screen.getByText('Профіль')).toBeInTheDocument();
-      expect(screen.getByText('Імʼя: Тестовий Користувач')).toBeInTheDocument();
-      expect(screen.getByText('Email: test@example.com')).toBeInTheDocument();
+      expect(screen.getByText('Імʼя:')).toBeInTheDocument();
+      expect(screen.getByText('Тестовий Користувач')).toBeInTheDocument();
+      expect(screen.getByText('Email:')).toBeInTheDocument();
+      expect(screen.getByText('test@example.com')).toBeInTheDocument();
       expect(screen.getByText('Моє перше відео')).toBeInTheDocument();
       expect(screen.getByText('Ще одне чудове відео')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Видалити акаунт' })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Вийти з акаунту' })).toBeInTheDocument();
       const firstVideoItem = screen.getByText('Моє перше відео').closest('li');
       const secondVideoItem = screen.getByText('Ще одне чудове відео').closest('li');
-      expect(within(firstVideoItem).getByRole('button', { name: 'Видалити' })).toBeInTheDocument();
-      expect(within(secondVideoItem).getByRole('button', { name: 'Видалити' })).toBeInTheDocument();
+      expect(within(firstVideoItem!).getByRole('button', { name: 'Видалити' })).toBeInTheDocument();
+      expect(within(secondVideoItem!).getByRole('button', { name: 'Видалити' })).toBeInTheDocument();
     });
 
     expect(global.fetch).toHaveBeenCalledWith('/api/profile/videos', {
@@ -146,19 +147,26 @@ describe('ProfilePage', () => {
     });
 
     alertSpy.mockRestore();
-  });
-
-  it('handles account deletion successfully', async () => {
+  });  it('handles account deletion successfully', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
       json: async () => mockVideos,
     });
     (global.fetch as jest.Mock).mockResolvedValueOnce({ ok: true }); // Mock for delete account
 
-    render(<ProfilePage />);
+    await act(async () => {
+      render(<ProfilePage />);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Видалити акаунт' })).toBeInTheDocument();
+    });
 
     const deleteAccountButton = screen.getByRole('button', { name: 'Видалити акаунт' });
-    fireEvent.click(deleteAccountButton);
+    
+    await act(async () => {
+      fireEvent.click(deleteAccountButton);
+    });
 
     expect(global.confirm).toHaveBeenCalledWith('Ви дійсно хочете видалити свій акаунт? Це дію неможливо скасувати.');
     expect(global.fetch).toHaveBeenCalledWith('/api/profile/deleteAccount', {
@@ -170,7 +178,6 @@ describe('ProfilePage', () => {
       expect(mockRouterPush).toHaveBeenCalledWith('/login');
     });
   });
-
   it('handles account deletion failure', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
@@ -181,6 +188,10 @@ describe('ProfilePage', () => {
 
     render(<ProfilePage />);
 
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Видалити акаунт' })).toBeInTheDocument();
+    });
+
     const deleteAccountButton = screen.getByRole('button', { name: 'Видалити акаунт' });
     fireEvent.click(deleteAccountButton);
 
@@ -190,23 +201,32 @@ describe('ProfilePage', () => {
     });
 
     alertSpy.mockRestore();
-  });
-
-  it('calls signOut on logout button click', () => {
-    render(<ProfilePage />);
+  });  it('calls signOut on logout button click', async () => {
+    await act(async () => {
+      render(<ProfilePage />);
+    });
+    
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Вийти з акаунту' })).toBeInTheDocument();
+    });
+    
     const logoutButton = screen.getByRole('button', { name: 'Вийти з акаунту' });
     fireEvent.click(logoutButton);
     expect(mockSignOut).toHaveBeenCalled();
-  });
-
-  it('updates name and password and calls update API', async () => {
+  });  it('updates name and password and calls update API', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
       json: async () => mockVideos,
     });
     (global.fetch as jest.Mock).mockResolvedValueOnce({ ok: true, json: async () => ({ message: 'Success' }) });
 
-    render(<ProfilePage />);
+    await act(async () => {
+      render(<ProfilePage />);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText('Нове імʼя')).toBeInTheDocument();
+    });
 
     const nameInput = screen.getByPlaceholderText('Нове імʼя');
     const passwordInput = screen.getByPlaceholderText('Новий пароль');
@@ -225,22 +245,29 @@ describe('ProfilePage', () => {
       });
       expect(screen.getByText('✅ Дані успішно оновлено. Увійдіть знову.')).toBeInTheDocument();
     });
-  });
-
-  it('displays error message on update failure', async () => {
+  });  it('displays error message on update failure', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
       json: async () => mockVideos,
     });
     (global.fetch as jest.Mock).mockResolvedValueOnce({ ok: false, json: async () => ({ message: 'Помилка оновлення' }) });
 
-    render(<ProfilePage />);
-
-    const updateButton = screen.getByRole('button', { name: 'Оновити' });
-    fireEvent.click(updateButton);
+    await act(async () => {
+      render(<ProfilePage />);
+    });
 
     await waitFor(() => {
-      expect(screen.getByText('❌ Помилка оновлення')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Оновити' })).toBeInTheDocument();
+    });
+
+    const updateButton = screen.getByRole('button', { name: 'Оновити' });
+    
+    await act(async () => {
+      fireEvent.click(updateButton);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Помилка оновлення')).toBeInTheDocument();
     });
   });
 });

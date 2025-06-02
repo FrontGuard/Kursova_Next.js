@@ -131,7 +131,7 @@ describe('LoginPage', () => {
       expect(mockSignIn).not.toHaveBeenCalled();
     });
 
-    fireEvent.change(screen.getByPlaceholderText('Password'), { target: { value: 'password123' } });
+    fireEvent.change(screen.getByPlaceholderText('Пароль'), { target: { value: 'password123' } });
     fireEvent.click(loginButton);
 
     await waitFor(() => {

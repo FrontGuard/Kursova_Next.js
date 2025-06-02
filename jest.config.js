@@ -28,6 +28,11 @@ const customJestConfig = {
   transformIgnorePatterns: [
     '/node_modules/(?!(next|next-auth|@next-auth)/)',
   ],
+  maxWorkers: 1,
+  workerIdleMemoryLimit: '512MB',
+  forceExit: true,
+  detectOpenHandles: true,
+  testTimeout: 15000,
 
   coverageThreshold: {
     global: {

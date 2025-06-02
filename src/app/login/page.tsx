@@ -12,6 +12,13 @@ const [error, setError] = useState('')
 
 const handleSubmit = async (e: React.FormEvent) => {
 e.preventDefault()
+
+// Add validation for empty fields
+if (!email.trim() || !password.trim()) {
+  setError('Будь ласка, заповніть всі поля')
+  return
+}
+
 const res = await signIn('credentials', {
 redirect: false,
 email,

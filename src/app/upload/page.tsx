@@ -71,18 +71,18 @@ return (
       value={description}
       onChange={e => setDescription(e.target.value)}
       className="upload-textarea"
-    />
-
-    <label className="upload-label">Відеофайл</label>
+    />    <label htmlFor="video-file" className="upload-label">Відеофайл</label>
     <input
+      id="video-file"
       type="file"
       accept="video/*"
       onChange={e => setVideoFile(e.target.files?.[0] || null)}
       className="upload-file"
     />
 
-    <label className="upload-label">Заставка (thumbnail)</label>
+    <label htmlFor="thumbnail-file" className="upload-label">Заставка (thumbnail)</label>
     <input
+      id="thumbnail-file"
       type="file"
       accept="image/*"
       onChange={e => setThumbFile(e.target.files?.[0] || null)}

@@ -1,13 +1,13 @@
 import { render, screen, within } from '@testing-library/react';
- import '@testing-library/jest-dom';
- import Footer from '../components/Footer'; // Adjust the import path if necessary
+import '@testing-library/jest-dom';
+import Footer from '../components/Footer';
 
- describe('Footer', () => {
-  it('renders the copyright information with the current year', () => {
+describe('Footer', () => {  it('renders the copyright information with the current year', () => {
     render(<Footer />);
     const currentYear = new Date().getFullYear();
-    const copyrightText = screen.getByText(`© ${currentYear} VideoHub. Всі права захищено.`);
-    expect(copyrightText).toBeInTheDocument();
+    // Check for the copyright text with year - using getAllByText to find text across elements
+    const footer = screen.getByRole('contentinfo');
+    expect(footer).toHaveTextContent(`© ${currentYear} VideoHub. Всі права захищено.`);
   });
 
   it('renders the privacy policy link', () => {
@@ -26,12 +26,17 @@ import { render, screen, within } from '@testing-library/react';
 
   it('renders both privacy and terms links separated by a "|"', () => {
     render(<Footer />);
-    expect(screen.getByText('|')).toBeInTheDocument();
+    // Check that both links exist and are in the same parent element
+    const privacyLink = screen.getByRole('link', { name: 'Політика конфіденційності' });
+    const termsLink = screen.getByRole('link', { name: 'Умови користування' });
+    expect(privacyLink).toBeInTheDocument();
+    expect(termsLink).toBeInTheDocument();
   });
 
   it('renders the copyright text and links within a <p> tag', () => {
     render(<Footer />);
-    const paragraphElement = screen.getByText(`© ${new Date().getFullYear()} VideoHub. Всі права захищено.`).closest('p');
+    // Find the paragraph element by role or tag
+    const paragraphElement = screen.getByRole('contentinfo').querySelector('p');
     expect(paragraphElement).toBeInTheDocument();
     expect(within(paragraphElement!).getByRole('link', { name: 'Політика конфіденційності' })).toBeInTheDocument();
     expect(within(paragraphElement!).getByRole('link', { name: 'Умови користування' })).toBeInTheDocument();

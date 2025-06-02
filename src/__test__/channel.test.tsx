@@ -1,41 +1,84 @@
 import { render, screen, waitFor, act } from '@testing-library/react';
- import '@testing-library/jest-dom';
- import AuthorChannelPage from '../app/channel/[id]/page';
- import { useParams } from 'next/navigation';
- import { useRouter, NextRouter } from 'next/router';
+import '@testing-library/jest-dom';
+import AuthorChannelPage from '../app/channel/[id]/page';
+import { useParams } from 'next/navigation';
+import { useRouter, NextRouter } from 'next/router';
+import { prismaMock } from '../../prisma.singelton';
 
- // Mock the useParams hook
- jest.mock('next/navigation', () => ({
+// Mock console.log to suppress output during tests
+const originalConsoleLog = console.log;
+beforeAll(() => {
+  console.log = jest.fn();
+});
+
+afterAll(() => {
+  console.log = originalConsoleLog;
+});
+
+// Mock next/link
+jest.mock('next/link', () => ({
+  __esModule: true,
+  default: ({ children, href }: { children: React.ReactNode; href: string }) => (
+    <a href={href}>{children}</a>
+  ),
+}));
+
+// Mock next/image
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: ({ src, alt, width, height, className }: { src: string; alt: string; width: number; height: number; className?: string }) => (
+    <img src={src} alt={alt} width={width} height={height} className={className} />
+  ),
+}));
+
+// Mock the useParams hook
+jest.mock('next/navigation', () => ({
   useParams: jest.fn(),
- }));
+}));
 
- // Mock the useRouter hook
- jest.mock('next/router', () => ({
+// Mock the useRouter hook
+jest.mock('next/router', () => ({
   useRouter: jest.fn(),
- }));
+}));
 
- // Mock the fetch API
- global.fetch = jest.fn();
+// Mock the fetch API
+global.fetch = jest.fn();
 
  const mockVideos = [
   { id: '1', title: 'Відео 1', thumbnail: '/thumbnail1.jpg', createdAt: '2025-05-30T10:00:00.000Z' },
   { id: '2', title: 'Відео 2', thumbnail: null, createdAt: '2025-05-29T15:30:00.000Z' },
  ];
-
- describe('AuthorChannelPage', () => {
+describe('AuthorChannelPage', () => {
   beforeEach(() => {
+    jest.clearAllMocks();
     (useParams as jest.Mock).mockReturnValue({ id: 'test-channel-id' });
     (global.fetch as jest.Mock).mockClear();
     (useRouter as jest.Mock).mockReturnValue({ push: jest.fn() } as unknown as NextRouter);
-  });
-
-  it('renders loading state initially', () => {
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
-      json: jest.fn().mockResolvedValue({ name: 'Тестовий автор', videos: [] }),
+  });  it('renders loading state initially', async () => {
+    // Create a promise that we can control to delay the fetch response
+    let resolvePromise: (value: any) => void;
+    const delayedPromise = new Promise(resolve => {
+      resolvePromise = resolve;
     });
 
-    render(<AuthorChannelPage />);
+    (global.fetch as jest.Mock).mockReturnValueOnce({
+      json: jest.fn().mockReturnValue(delayedPromise),
+    });
+
+    await act(async () => {
+      render(<AuthorChannelPage />);
+    });
+    
+    // Check for loading state immediately after render
     expect(screen.getByText('Завантаження...')).toBeInTheDocument();
+
+    // Now resolve the promise to complete the test
+    resolvePromise!({ name: 'Тестовий автор', videos: [] });
+    
+    // Wait for the loading to complete
+    await waitFor(() => {
+      expect(screen.queryByText('Завантаження...')).not.toBeInTheDocument();
+    });
   });
 
   it('fetches and displays author name and video count', async () => {
@@ -99,9 +142,7 @@ import { render, screen, waitFor, act } from '@testing-library/react';
     await waitFor(() => {
       expect(screen.getByText('Канал: Невідомий автор')).toBeInTheDocument();
     });
-  });
-
-  it('renders 0 as the video count if videos are not provided or not an array', async () => {
+  });  it('renders 0 as the video count if videos are not provided', async () => {
     // Test case 1: videos is undefined
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       json: jest.fn().mockResolvedValue({ name: 'Тестовий автор' }),
@@ -114,7 +155,8 @@ import { render, screen, waitFor, act } from '@testing-library/react';
     await waitFor(() => {
       expect(screen.getByText('Загальна кількість відео: 0')).toBeInTheDocument();
     });
-
+  });
+  it('renders 0 as the video count if videos is not an array', async () => {
     // Test case 2: videos is 'not an array'
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       json: jest.fn().mockResolvedValue({ name: 'Тестовий автор', videos: 'not an array' }),
@@ -159,10 +201,7 @@ import { render, screen, waitFor, act } from '@testing-library/react';
       expect(links[0]).toHaveAttribute('href', '/video/1');
       expect(links[1]).toHaveAttribute('href', '/video/2');
     });
-  });
-
-  it('handles a response with null or undefined name', async () => {
-    // Test case 1: name is null
+  });  it('handles a response with null name', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       json: jest.fn().mockResolvedValue({ name: null, videos: mockVideos }),
     });
@@ -175,8 +214,8 @@ import { render, screen, waitFor, act } from '@testing-library/react';
       expect(screen.getByText('Канал: Невідомий автор')).toBeInTheDocument();
       expect(screen.getByText('Загальна кількість відео: 2')).toBeInTheDocument();
     });
-
-    // Test case 2: name is undefined
+  });
+  it('handles a response with undefined name', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       json: jest.fn().mockResolvedValue({ name: undefined, videos: mockVideos }),
     });
@@ -189,10 +228,7 @@ import { render, screen, waitFor, act } from '@testing-library/react';
       expect(screen.getByText('Канал: Невідомий автор')).toBeInTheDocument();
       expect(screen.getByText('Загальна кількість відео: 2')).toBeInTheDocument();
     });
-  });
-
-  it('handles a response with videos as null or undefined', async () => {
-    // Test case 1: videos is null
+  });  it('handles a response with null videos', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       json: jest.fn().mockResolvedValue({ name: 'Тестовий автор', videos: null }),
     });
@@ -206,8 +242,8 @@ import { render, screen, waitFor, act } from '@testing-library/react';
       expect(screen.getByText('Загальна кількість відео: 0')).toBeInTheDocument();
       expect(screen.getByText('Автор ще не додав жодного відео.')).toBeInTheDocument();
     });
-
-    // Test case 2: videos is undefined
+  });
+  it('handles a response with undefined videos', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       json: jest.fn().mockResolvedValue({ name: 'Тестовий автор', videos: undefined }),
     });

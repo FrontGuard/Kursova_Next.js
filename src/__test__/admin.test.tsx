@@ -61,22 +61,20 @@ describe('AdminPage', () => {
     mockUseSession.mockReturnValue({ data: { user: { role: 'admin' } }, status: 'authenticated' });
     (global.fetch as jest.Mock)
       .mockResolvedValueOnce({ ok: true, json: async () => [{ id: '1', title: 'Video 1' }] })
-      .mockResolvedValueOnce({ ok: true, json: async () => [{ id: 'a', name: 'Admin', email: 'admin@example.com', role: 'admin' }] });
+      .mockResolvedValueOnce({ ok: true, json: async () => [{ id: 'a', name: 'Admin', email: 'admin@example.com', role: 'admin' }] });    render(<AdminPage />);
 
-    render(<AdminPage />);    await waitFor(() => {
+    await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledTimes(2);
       expect(global.fetch).toHaveBeenCalledWith('/api/admin/videos', { credentials: 'include' });
       expect(global.fetch).toHaveBeenCalledWith('/api/admin/users', { credentials: 'include' });
-    });
-
-    await waitFor(
+    });    await waitFor(
       () => {
         expect(screen.getByRole('heading', { name: 'Адмін-панель' })).toBeInTheDocument();
         expect(screen.getByRole('heading', { name: 'Відео' })).toBeInTheDocument();
         expect(screen.getByRole('heading', { name: 'Користувачі' })).toBeInTheDocument();
         expect(screen.getByText('Video 1')).toBeInTheDocument();
         expect(screen.getByText('Admin')).toBeInTheDocument();
-        expect(screen.getByText('admin@example.com')).toBeInTheDocument();
+        expect(screen.getByText(/admin@example\.com/)).toBeInTheDocument();
       },
       { timeout: 3000 }
     );
@@ -163,8 +161,7 @@ describe('AdminPage', () => {
     });
 
     alertSpy.mockRestore();
-  });
-  it('handles user deletion successfully', async () => {
+  });  it('handles user deletion successfully', async () => {
     mockUseSession.mockReturnValue({ data: { user: { role: 'admin', id: 'adminId' } }, status: 'authenticated' });
     (global.fetch as jest.Mock)
       .mockResolvedValueOnce({ ok: true, json: async () => [{ id: '1', title: 'Video 1' }] })
@@ -175,7 +172,7 @@ describe('AdminPage', () => {
 
     await waitFor(() => {
       expect(screen.getByText('User 2')).toBeInTheDocument();
-      expect(screen.getByText('user2@example.com')).toBeInTheDocument();
+      expect(screen.getByText(/user2@example\.com/)).toBeInTheDocument();
     });
 
     const userItems = screen.getAllByText('Видалити');
@@ -191,8 +188,7 @@ describe('AdminPage', () => {
     await waitFor(() => {
       expect(screen.queryByText('User 2')).toBeNull();
     });
-  });
-  it('handles user deletion failure', async () => {
+  });  it('handles user deletion failure', async () => {
     mockUseSession.mockReturnValue({ data: { user: { role: 'admin', id: 'adminId' } }, status: 'authenticated' });
     (global.fetch as jest.Mock)
       .mockResolvedValueOnce({ ok: true, json: async () => [{ id: '1', title: 'Video 1' }] })
@@ -206,7 +202,7 @@ describe('AdminPage', () => {
 
     await waitFor(() => {
       expect(screen.getByText('User 2')).toBeInTheDocument();
-      expect(screen.getByText('user2@example.com')).toBeInTheDocument();
+      expect(screen.getByText(/user2@example\.com/)).toBeInTheDocument();
     });
 
     const userItems = screen.getAllByText('Видалити');
@@ -230,11 +226,9 @@ describe('AdminPage', () => {
 
     const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
 
-    render(<AdminPage />);
-
-    await waitFor(() => {
+    render(<AdminPage />);    await waitFor(() => {
       expect(screen.getByText('Admin')).toBeInTheDocument();
-      expect(screen.getByText('admin@example.com')).toBeInTheDocument();
+      expect(screen.getByText(/admin@example\.com/)).toBeInTheDocument();
     });
 
     // Admin users should not have a delete button (role !== "admin" check in component)
@@ -245,8 +239,7 @@ describe('AdminPage', () => {
     expect(deleteButtonInAdminItem).toBeNull(); // Admin should not have delete button
 
     alertSpy.mockRestore();
-  });
-  it('handles fetch errors', async () => {
+  });  it('handles fetch errors', async () => {
     mockUseSession.mockReturnValue({ data: { user: { role: 'admin' } }, status: 'authenticated' });
     const errorMessage = 'Failed to fetch data';
     (global.fetch as jest.Mock).mockRejectedValue(new Error(errorMessage));
