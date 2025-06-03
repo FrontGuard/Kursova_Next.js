@@ -4,8 +4,8 @@ const mockCompare = jest.fn();
 const mockGetServerSession = jest.fn();
 const mockFindUnique = jest.fn();
 
-// Mock bcrypt
-jest.mock("bcrypt", () => ({
+// Mock bcryptjs
+jest.mock("bcryptjs", () => ({
   compare: mockCompare,
 }));
 
@@ -24,7 +24,7 @@ jest.mock("../lib/prisma", () => ({
 }));
 
 import { authOptions, auth } from "../lib/auth";
-import { compare } from "bcrypt";
+import { compare } from "bcryptjs";
 import { getServerSession } from "next-auth/next";
 import { prisma } from "../lib/prisma";
 import { User } from "@prisma/client";

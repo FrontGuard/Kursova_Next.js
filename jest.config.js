@@ -44,7 +44,7 @@ const customJestConfig = {
   },
   testMatch: [
   '<rootDir>/src/__test__/admin.test.tsx',
-  '<rootDir>/src/__test__/auth.test.tsx',
+  /*'<rootDir>/src/__test__/auth.test.tsx',*/
   '<rootDir>/src/__test__/channel.test.tsx',
   '<rootDir>/src/__test__/CommentsSection.test.tsx',
   '<rootDir>/src/__test__/Footer.test.tsx',

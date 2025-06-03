@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth'; // Змінено імпорт
 import { authOptions } from '../../../../lib/auth';
 import { prisma } from '../../../../lib/prisma';
-import bcrypt from 'bcrypt';
+import bcryptjs from 'bcryptjs';
 
 export async function PUT(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -15,7 +15,7 @@ export async function PUT(req: NextRequest) {
   try {
     const data: any = {};
     if (name) data.name = name;
-    if (password) data.password = await bcrypt.hash(password, 10);
+    if (password) data.password = await bcryptjs.hash(password, 10);
 
     await prisma.user.update({
       where: { email: session.user.email },

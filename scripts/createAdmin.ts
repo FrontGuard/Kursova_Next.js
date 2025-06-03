@@ -1,9 +1,9 @@
 // scripts/createAdmin.ts
 import { prisma } from '../src/lib/prisma'
-import bcrypt from 'bcryptjs'
+import bcryptjs from 'bcryptjs'
 
 async function main() {
-const hashed = await bcrypt.hash('admin123', 10)
+const hashed = await bcryptjs.hash('admin123', 10)
 
 await prisma.user.create({
 data: {
