@@ -1,4 +1,12 @@
 export const runtime = 'nodejs';
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "100mb" // або інше обґрунтоване значення
+    },
+  },
+};
+
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
@@ -27,6 +35,7 @@ export async function POST(request: Request) {
       { status: 400 }
     );
   }
+  
 
   // 3. Створюємо папку public/uploads, якщо нема
   const uploadDir = path.join(process.cwd(), 'public', 'uploads');
