@@ -1,3 +1,4 @@
+export const runtime = 'nodejs';  // Потрібно для використання Node API
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
@@ -7,8 +8,7 @@ import path from 'path';
 import formidable from 'formidable';
 import { IncomingMessage } from 'http';
 
-export const runtime = 'nodejs'; // Потрібно для використання Node API
-
+// Потрібно для обробки форм з файлами
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
